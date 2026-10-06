@@ -13,6 +13,7 @@ namespace PassthroughCameraSamples.MultiObjectDetection
     public class DetectionManager : MonoBehaviour
     {
         [SerializeField] private PassthroughCameraAccess m_cameraAccess;
+        [SerializeField] private DetectionUiMenuManager m_menuManager;
 
         [Header("Placement configuration")]
         [SerializeField] private DetectionSpawnMarkerAnim m_spawnMarker;
@@ -79,6 +80,7 @@ namespace PassthroughCameraSamples.MultiObjectDetection
                     yield return CreateSpatialAnchorAndSave();
                     if (m_spatialAnchor == null)
                     {
+                        yield return new WaitForSeconds(5f);
                         continue;
                     }
                 }
@@ -117,8 +119,11 @@ namespace PassthroughCameraSamples.MultiObjectDetection
                 var saveAnchorResult = awaiter.GetResult();
                 if (!saveAnchorResult.Success)
                 {
-                    LogSpatialAnchor($"SaveAnchorAsync() failed {saveAnchorResult}", LogType.Error);
+                    string message = $"SaveAnchorAsync() failed with error {saveAnchorResult}. Please check that the USE_ANCHOR_API permission is granted.\n" +
+                                     "Also check that your app is uploaded to the Meta Horizon Store: https://developers.meta.com/vr/documentation/unity/unity-ssa-ts/#app-is-untrusted";
+                    LogSpatialAnchor(message, LogType.Error);
                     EraseSpatialAnchor();
+                    m_menuManager.m_labelInformation.text = message;
                     yield break;
                 }
                 LogSpatialAnchor("created");
@@ -171,6 +176,8 @@ namespace PassthroughCameraSamples.MultiObjectDetection
 
                 LogSpatialAnchor($"tracking restoration failed after {numRetries} retries", LogType.Warning);
                 EraseSpatialAnchor();
+                CleanMarkers();
+                m_uiInference.ClearAnnotations();
             }
         }
 
@@ -182,9 +189,6 @@ namespace PassthroughCameraSamples.MultiObjectDetection
                 m_spatialAnchor.EraseAnchorAsync();
                 DestroyImmediate(m_spatialAnchor);
                 m_spatialAnchor = null;
-
-                CleanMarkers();
-                m_uiInference.ClearAnnotations();
             }
         }
 

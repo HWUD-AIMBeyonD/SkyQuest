@@ -15,7 +15,7 @@ namespace PassthroughCameraSamples.MultiObjectDetection
         [SerializeField] private GameObject m_loadingPanel;
         [SerializeField] private GameObject m_initialPanel;
         [SerializeField] private GameObject m_noPermissionPanel;
-        [SerializeField] private Text m_labelInformation;
+        [SerializeField] internal Text m_labelInformation;
 
         public bool IsInputActive { get; set; } = false;
 
