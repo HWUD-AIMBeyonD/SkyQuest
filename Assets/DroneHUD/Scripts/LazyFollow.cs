@@ -18,6 +18,12 @@ namespace DroneHud
         private Vector3 m_velocity;
         private bool m_isMoving;
 
+        public void Configure(float distance, float verticalOffset)
+        {
+            m_distance = distance;
+            m_verticalOffset = verticalOffset;
+        }
+
         public void Recenter()
         {
             if (!TryGetHead())

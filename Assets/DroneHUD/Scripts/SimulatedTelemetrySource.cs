@@ -32,8 +32,12 @@ namespace DroneHud
         public override string SourceName => "SIM";
         public override IReadOnlyList<DroneState> Drones => m_drones;
 
-        private void Awake()
+        private void Awake() => Restart();
+
+        /// <summary>Resets the swarm to the ground and restarts the staggered take-off from now.</summary>
+        public void Restart()
         {
+            m_drones.Clear();
             m_drainRates = new float[m_droneCount];
             m_orbitRadius = new float[m_droneCount];
             m_orbitSpeed = new float[m_droneCount];

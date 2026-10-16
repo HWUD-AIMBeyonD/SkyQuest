@@ -40,6 +40,7 @@ namespace DroneHud
 
         private Font m_font;
         private LazyFollow m_follow;
+        private CanvasGroup m_canvasGroup;
         private Image m_alertBackground;
         private Text m_alertText;
         private Text m_headerText;
@@ -54,6 +55,15 @@ namespace DroneHud
             get => m_source;
             set => m_source = value;
         }
+
+        /// <summary>Overall HUD opacity, used by the intro to fade the panel in.</summary>
+        public float Alpha
+        {
+            get => m_canvasGroup.alpha;
+            set => m_canvasGroup.alpha = value;
+        }
+
+        public void Recenter() => m_follow.Recenter();
 
         private sealed class Row
         {
@@ -238,6 +248,9 @@ namespace DroneHud
             var canvasRect = (RectTransform)canvasGo.transform;
             canvasRect.sizeDelta = new Vector2(Width, height);
             canvasRect.localScale = Vector3.one * 0.001f;
+            m_canvasGroup = canvasGo.AddComponent<CanvasGroup>();
+            m_canvasGroup.interactable = false;
+            m_canvasGroup.blocksRaycasts = false;
             m_follow = canvasGo.AddComponent<LazyFollow>();
 
             var panel = CreateImage("Panel", canvasRect, 0f, 0f, Width, height, PanelColor);
