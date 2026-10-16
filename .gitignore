@@ -19,3 +19,9 @@ PerformanceTestRun*.*
 StreamingAssets*
 buildInfo.txt
 Packages/packages-lock.json
+
+# Local build / IDE artifacts
+*.slnx
+*_BurstDebugInformation_DoNotShip/
+.vscode/launch.json
+.vscode/settings.json
